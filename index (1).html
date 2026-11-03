@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TravelEasy – Book Bus &amp; Train Tickets Online</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🚌%3C/text%3E%3C/svg%3E">
+<style>
+:root{--bg:#f5f7fd;--card:#fff;--text:#1e1b4b;--muted:#6b7280;--line:#e5e7f0;--pri:#4f46e5;--pri2:#7c3aed;--ok:#059669;--err:#dc2626;--bus:#f59e0b;--train:#10b981;--shadow:0 10px 30px rgba(79,70,229,.12);color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1020;--card:#161c33;--text:#e8eaf6;--muted:#9aa3c0;--line:#2a3252;--pri:#6366f1;--ok:#34d399;--err:#f87171;--shadow:0 10px 30px rgba(0,0,0,.4);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0b1020;--card:#161c33;--text:#e8eaf6;--muted:#9aa3c0;--line:#2a3252;--pri:#6366f1;--ok:#34d399;--err:#f87171;--shadow:0 10px 30px rgba(0,0,0,.4);color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:#4338ca;z-index:10}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:11;background:#4338ca;color:#fff;display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:space-between;align-items:center;padding:12px 20px}
+header b{font-size:19px}
+header nav{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+header a{color:#fff;cursor:pointer;font-size:14px;padding:6px 12px;border-radius:99px;opacity:.9}
+header a:hover{background:rgba(255,255,255,.18);opacity:1}
+header a.cta{background:#fff;color:#4338ca;font-weight:600}
+.hero{background:linear-gradient(135deg,#4338ca 0%,#7c3aed 55%,#0ea5e9 100%);color:#fff;text-align:center;padding:44px 18px 84px}
+.hero h1{margin:0 0 10px;font-size:clamp(28px,6vw,46px);line-height:1.15}
+.hero p{margin:0 auto;max-width:520px;opacity:.92;font-size:16px}
+.hero .stats{display:flex;justify-content:center;gap:26px;margin-top:22px;flex-wrap:wrap}
+.hero .stats div{font-size:13px;opacity:.9}.hero .stats b{display:block;font-size:22px}
+main{max-width:940px;margin:0 auto;padding:18px 14px 40px}
+main.up{margin-top:-58px;padding-top:0}
+.card{background:var(--card);border-radius:16px;padding:16px;margin-bottom:14px;box-shadow:var(--shadow);border:1px solid var(--line)}
+input,select{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--text);font-size:14px}
+input:focus,select:focus{outline:2px solid var(--pri);border-color:transparent}
+label{font-size:12px;font-weight:600;color:var(--muted);display:flex;flex-direction:column;gap:5px}
+button{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;border:0;border-radius:10px;padding:11px 16px;font-size:14px;font-weight:600;cursor:pointer;transition:transform .1s,opacity .2s}
+button:hover{opacity:.92}button:active{transform:scale(.97)}
+button.red{background:var(--err)}button.sm{padding:6px 10px;font-size:13px}
+button.tab{background:var(--card);color:var(--text);border:1px solid var(--line)}button.tab.on{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;border-color:transparent}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;align-items:end}
+.search{padding:20px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 18px;align-items:center}
+.chips span{font-size:13px;color:var(--muted)}
+.chip{background:var(--card);color:var(--text);border:1px solid var(--line);border-radius:99px;padding:6px 12px;font-size:13px;font-weight:500}
+.form{max-width:400px;margin:28px auto;display:flex;flex-direction:column;gap:12px}
+h2{margin:6px 0 14px}
+.trip{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center;border-left:5px solid var(--bus)}
+.trip.TRAIN{border-left-color:var(--train)}
+.tl{display:flex;align-items:center;gap:12px;flex:1 1 280px}
+.tl .t b{font-size:20px;display:block}.tl .t span{font-size:13px;color:var(--muted)}
+.tl .mid{flex:1;text-align:center;font-size:12px;color:var(--muted);min-width:60px}
+.tl .mid i{display:block;height:2px;background:var(--line);margin-top:4px}
+.info{flex:1 1 200px}.info strong{font-size:16px}
+.tag{font-size:11px;font-weight:700;color:#fff;padding:2px 9px;border-radius:99px;margin-right:6px;background:var(--bus)}.tag.TRAIN{background:var(--train)}
+.muted{color:var(--muted);font-size:13px;margin:3px 0}.center{text-align:center}
+.bar{height:6px;background:var(--line);border-radius:99px;overflow:hidden;margin:8px 0 3px}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--train),var(--bus))}
+.side{display:flex;flex-direction:column;gap:8px;min-width:170px}
+.price{font-size:24px;font-weight:800}.price small{font-size:12px;font-weight:400;color:var(--muted)}
+.st{font-size:12px;font-weight:700;padding:2px 10px;border-radius:99px;align-self:flex-start;border:1px solid currentColor}.st.CONFIRMED{color:var(--ok)}.st.CANCELLED{color:var(--err)}
+.msg{padding:10px 14px;border-radius:10px;margin-bottom:14px;font-size:14px;font-weight:500}.msg.ok{background:rgba(16,185,129,.14);color:var(--ok)}.msg.err{background:rgba(220,38,38,.12);color:var(--err)}
+.stats2{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px}
+.stat{text-align:center;margin:0}.stat b{display:block;font-size:26px;color:var(--pri)}.stat span{color:var(--muted);font-size:13px}
+.tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.wrap{overflow-x:auto;background:var(--card);border-radius:16px;border:1px solid var(--line);box-shadow:var(--shadow);margin-bottom:14px}
+table{border-collapse:collapse;width:100%;font-size:13px}th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}th{color:var(--muted);font-weight:600}
+footer{text-align:center;padding:26px 16px 36px;color:var(--muted);font-size:13px}
+footer .stack{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:10px}
+footer .stack span{background:var(--card);border:1px solid var(--line);border-radius:99px;padding:4px 12px;color:var(--text);font-weight:600;font-size:12px}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<noscript>Please enable JavaScript to use this app.</noscript>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/htm@3.1.1/dist/htm.umd.js"></script>
+<script>
+const { useState, Fragment } = React;
+const html = htm.bind(React.createElement);
+
+/* ---------- helpers ---------- */
+const ds = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+const fmt = d => d.toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' });
+const clock = d => d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+const dur = (a, b) => { const m = Math.round((b - a) / 6e4); return Math.floor(m / 60) + 'h ' + String(m % 60).padStart(2, '0') + 'm'; };
+const money = n => '₹' + Number(n).toLocaleString('en-IN');
+const ROUTES = [['Bangalore', 'Chennai'], ['Delhi', 'Mumbai'], ['Delhi', 'Jaipur']];
+
+/* ---------- sample data ---------- */
+function seedTrips() {
+  const list = []; let id = 1;
+  const add = (type, op, src, dst, off, h, m, hrs, price, seats) => {
+    const dep = new Date(); dep.setDate(dep.getDate() + off); dep.setHours(h, m, 0, 0);
+    list.push({ id: id++, type, op, src, dst, dep, arr: new Date(dep.getTime() + hrs * 36e5), price, seats, avail: seats });
+  };
+  for (let i = 1; i <= 3; i++) {
+    add('BUS', 'Blue Line Travels', 'Bangalore', 'Chennai', i, 21, 0, 7, 850, 40);
+    add('BUS', 'Sunrise Express', 'Bangalore', 'Chennai', i, 23, 0, 7, 700, 35);
+    add('TRAIN', 'Shatabdi Express', 'Bangalore', 'Chennai', i, 6, 0, 5, 1200, 80);
+    add('TRAIN', 'Rajdhani Express', 'Delhi', 'Mumbai', i, 16, 30, 16, 2500, 100);
+    add('BUS', 'Royal Cruiser', 'Delhi', 'Jaipur', i, 7, 0, 5.5, 600, 45);
+  }
+  return list;
+}
+const seedUsers = [{ name: 'Admin', email: 'admin@travel.com', password: 'Admin@123', role: 'ADMIN' }];
+
+/* ---------- components ---------- */
+const Nav = ({ me, go, logout }) => html`
+  <header><b>🚌 TravelEasy</b>
+    <nav>
+      <a onClick=${() => go('search')}>Search</a>
+      ${me && html`<a onClick=${() => go('bookings')}>My bookings</a>`}
+      ${me && me.role === 'ADMIN' && html`<a onClick=${() => go('admin')}>Admin</a>`}
+      ${me
+        ? html`<a onClick=${logout}>Logout (${me.name})</a>`
+        : html`<${Fragment}><a onClick=${() => go('login')}>Login</a><a className="cta" onClick=${() => go('register')}>Register</a><//>`}
+    </nav>
+  </header>`;
+
+const Hero = ({ count }) => html`
+  <section className="hero">
+    <h1>Book bus & train tickets in seconds</h1>
+    <p>Search routes, pick your seats and manage every booking in one place.</p>
+    <div className="stats"><div><b>${count}</b>Trips</div><div><b>3</b>Popular routes</div><div><b>24/7</b>Booking</div></div>
+  </section>`;
+
+const Timeline = ({ t }) => html`
+  <div className="tl">
+    <div className="t"><b>${clock(t.dep)}</b><span>${t.src}</span></div>
+    <div className="mid">${dur(t.dep, t.arr)}<i></i></div>
+    <div className="t"><b>${clock(t.arr)}</b><span>${t.dst}</span></div>
+  </div>`;
+
+function TripCard({ t, me, book }) {
+  const [seats, setSeats] = useState(1);
+  const [pax, setPax] = useState(me ? me.name : '');
+  return html`
+    <div className=${'card trip ' + t.type}>
+      <${Timeline} t=${t} />
+      <div className="info">
+        <span className=${'tag ' + t.type}>${t.type}</span><strong>${t.op}</strong>
+        <p className="muted">${t.dep.toLocaleDateString([], { weekday: 'short', day: 'numeric', month: 'short' })}</p>
+        <div className="bar"><i style=${{ width: ((t.seats - t.avail) / t.seats * 100) + '%' }}></i></div>
+        <p className="muted">${t.avail} of ${t.seats} seats left</p>
+      </div>
+      <div className="side">
+        <div className="price">${money(t.price)}<small> / seat</small></div>
+        <input placeholder="Passenger name" value=${pax} onInput=${e => setPax(e.target.value)} />
+        <input type="number" min="1" max=${Math.min(6, t.avail)} value=${seats} onInput=${e => setSeats(e.target.value)} aria-label="Seats" />
+        <button onClick=${() => book(t, pax, Number(seats))}>Book now</button>
+      </div>
+    </div>`;
+}
+
+function SearchView({ q, setQ, trips, me, book }) {
+  const s = new Date(q.date + 'T00:00:00'), e = new Date(s.getTime() + 864e5), now = new Date();
+  const from = q.from.trim().toLowerCase(), to = q.to.trim().toLowerCase();
+  const results = trips
+    .filter(t => t.src.toLowerCase() === from && t.dst.toLowerCase() === to && t.dep >= s && t.dep < e && t.dep > now && t.avail > 0 && (!q.type || t.type === q.type))
+    .sort((a, b) => a.dep - b.dep);
+  const submit = ev => { ev.preventDefault(); setQ(Object.fromEntries(new FormData(ev.target))); };
+  return html`<${Fragment}>
+    <form className="card search grid" key=${q.from + q.to + q.date + q.type} onSubmit=${submit}>
+      <label>From<input name="from" required defaultValue=${q.from} /></label>
+      <label>To<input name="to" required defaultValue=${q.to} /></label>
+      <label>Date<input type="date" name="date" required defaultValue=${q.date} /></label>
+      <label>Type<select name="type" defaultValue=${q.type}><option value="">Bus & Train</option><option value="BUS">Bus</option><option value="TRAIN">Train</option></select></label>
+      <button>🔍 Search</button>
+    </form>
+    <div className="chips"><span>Popular:</span>
+      ${ROUTES.map(r => html`<button key=${r[0] + r[1]} className="chip" onClick=${() => setQ({ ...q, from: r[0], to: r[1] })}>${r[0]} → ${r[1]}</button>`)}
+    </div>
+    ${results.length
+      ? results.map(t => html`<${TripCard} key=${t.id} t=${t} me=${me} book=${book} />`)
+      : html`<div className="card center"><p><b>No trips found</b></p><p className="muted">Try a popular route above and pick tomorrow or the next two days.</p></div>`}
+  <//>`;
+}
+
+function AuthForm({ title, fields, button, onSubmit, note }) {
+  const submit = e => { e.preventDefault(); onSubmit(Object.fromEntries(new FormData(e.target))); };
+  return html`
+    <form className="card form" onSubmit=${submit}>
+      <h2>${title}</h2>
+      ${fields.map(f => html`<input key=${f.name} ...${f} required />`)}
+      <button>${button}</button>
+      ${note && html`<p className="muted">${note}</p>`}
+    </form>`;
+}
+
+function BookingsView({ me, bookings, trips, cancel }) {
+  const mine = bookings.filter(b => b.user === me.email).sort((a, b) => b.at - a.at);
+  return html`<${Fragment}>
+    <h2>My bookings</h2>
+    ${mine.length ? mine.map(b => {
+      const t = trips.find(x => x.id === b.tripId);
+      return html`
+        <div className=${'card trip ' + t.type} key=${b.id}>
+          <${Timeline} t=${t} />
+          <div className="info">
+            <span className=${'tag ' + t.type}>${t.type}</span><strong>${t.op}</strong>
+            <p className="muted">${fmt(t.dep)}</p>
+            <p className="muted">${b.pax} · ${b.seats} seat(s) · Booking #${b.id}</p>
+          </div>
+          <div className="side">
+            <div className="price">${money(b.total)}</div>
+            <span className=${'st ' + b.status}>${b.status}</span>
+            ${b.status === 'CONFIRMED' && t.dep > new Date() && html`<button className="red" onClick=${() => cancel(b.id)}>Cancel booking</button>`}
+          </div>
+        </div>`;
+    }) : html`<div className="card center"><p className="muted">You have no bookings yet. Search a trip and book your first ticket!</p></div>`}
+  <//>`;
+}
+
+function AdminView({ tab, setTab, users, trips, bookings, addTrip, delTrip }) {
+  const confirmed = bookings.filter(b => b.status === 'CONFIRMED');
+  const stats = [[users.length, 'Users'], [trips.length, 'Trips'], [bookings.length, 'Total bookings'], [confirmed.length, 'Confirmed'],
+                 [bookings.length - confirmed.length, 'Cancelled'], [money(confirmed.reduce((s, b) => s + b.total, 0)), 'Revenue']];
+  const submit = e => { e.preventDefault(); addTrip(Object.fromEntries(new FormData(e.target))); };
+  return html`<${Fragment}>
+    <h2>Admin dashboard</h2>
+    <div className="tabs">${['stats', 'trips', 'bookings'].map(t => html`
+      <button key=${t} className=${'tab ' + (t === tab ? 'on' : '')} onClick=${() => setTab(t)}>${t[0].toUpperCase() + t.slice(1)}</button>`)}</div>
+
+    ${tab === 'stats' && html`<div className="stats2">${stats.map(s => html`<div className="card stat" key=${s[1]}><b>${s[0]}</b><span>${s[1]}</span></div>`)}</div>`}
+
+    ${tab === 'trips' && html`<${Fragment}>
+      <form className="card grid" onSubmit=${submit}>
+        <label>Type<select name="type"><option>BUS</option><option>TRAIN</option></select></label>
+        <label>Operator<input name="op" required /></label>
+        <label>Source<input name="src" required /></label>
+        <label>Destination<input name="dst" required /></label>
+        <label>Departure<input type="datetime-local" name="dep" required /></label>
+        <label>Arrival<input type="datetime-local" name="arr" required /></label>
+        <label>Price<input type="number" name="price" min="0" required /></label>
+        <label>Seats<input type="number" name="seats" min="1" required /></label>
+        <button>Add trip</button>
+      </form>
+      <div className="wrap"><table>
+        <thead><tr><th>ID</th><th>Type</th><th>Operator</th><th>Route</th><th>Departure</th><th>Price</th><th>Seats</th><th></th></tr></thead>
+        <tbody>${[...trips].sort((a, b) => b.dep - a.dep).map(t => html`
+          <tr key=${t.id}><td>${t.id}</td><td>${t.type}</td><td>${t.op}</td><td>${t.src} → ${t.dst}</td><td>${fmt(t.dep)}</td><td>${money(t.price)}</td><td>${t.avail}/${t.seats}</td>
+          <td><button className="red sm" onClick=${() => delTrip(t.id)}>Delete</button></td></tr>`)}</tbody>
+      </table></div>
+    <//>`}
+
+    ${tab === 'bookings' && html`
+      <div className="wrap"><table>
+        <thead><tr><th>ID</th><th>User</th><th>Passenger</th><th>Trip</th><th>Seats</th><th>Total</th><th>Status</th></tr></thead>
+        <tbody>${bookings.length ? bookings.map(b => { const t = trips.find(x => x.id === b.tripId); return html`
+          <tr key=${b.id}><td>${b.id}</td><td>${b.user}</td><td>${b.pax}</td><td>${t.op}: ${t.src} → ${t.dst}</td><td>${b.seats}</td><td>${money(b.total)}</td><td><span className=${'st ' + b.status}>${b.status}</span></td></tr>`; })
+          : html`<tr><td colSpan="7" className="muted">No bookings yet</td></tr>`}</tbody>
+      </table></div>`}
+  <//>`;
+}
+
+/* ---------- App (all state lives here) ---------- */
+function App() {
+  const [users, setUsers] = useState(seedUsers);
+  const [trips, setTrips] = useState(seedTrips);
+  const [bookings, setBookings] = useState([]);
+  const [me, setMe] = useState(null);
+  const [view, setView] = useState('search');
+  const [tab, setTab] = useState('stats');
+  const [msg, setMsg] = useState(null);
+  const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
+  const [q, setQ] = useState({ from: 'Bangalore', to: 'Chennai', date: ds(tomorrow), type: '' });
+
+  const go = (v, m) => { setView(v); setMsg(m || null); window.scrollTo(0, 0); };
+
+  const login = d => {
+    const u = users.find(x => x.email === d.email.trim().toLowerCase() && x.password === d.password);
+    if (!u) return go('login', { ok: false, t: 'Invalid email or password' });
+    setMe(u); go(u.role === 'ADMIN' ? 'admin' : 'search', { ok: true, t: 'Welcome, ' + u.name });
+  };
+  const register = d => {
+    const email = d.email.trim().toLowerCase();
+    if (users.some(x => x.email === email)) return go('register', { ok: false, t: 'Email already registered' });
+    setUsers([...users, { name: d.name.trim(), email, password: d.password, role: 'USER' }]);
+    go('login', { ok: true, t: 'Registered! Please log in.' });
+  };
+  const book = (t, pax, n) => {
+    if (!me) return go('login', { ok: false, t: 'Please log in to book tickets' });
+    if (!pax.trim()) return go('search', { ok: false, t: 'Passenger name is required' });
+    if (!(n >= 1 && n <= 6)) return go('search', { ok: false, t: 'You can book 1 to 6 seats at once' });
+    if (t.avail < n) return go('search', { ok: false, t: 'Only ' + t.avail + ' seat(s) left' });
+    setTrips(ts => ts.map(x => x.id === t.id ? { ...x, avail: x.avail - n } : x));
+    setBookings(bs => [...bs, { id: bs.length + 1, user: me.email, tripId: t.id, pax: pax.trim(), seats: n, total: t.price * n, status: 'CONFIRMED', at: new Date() }]);
+    go('search', { ok: true, t: 'Booked ' + n + ' seat(s) on ' + t.op + ' for ' + money(t.price * n) + '. See My bookings.' });
+  };
+  const cancel = id => {
+    const b = bookings.find(x => x.id === id);
+    setBookings(bs => bs.map(x => x.id === id ? { ...x, status: 'CANCELLED' } : x));
+    setTrips(ts => ts.map(x => x.id === b.tripId ? { ...x, avail: x.avail + b.seats } : x));
+    go('bookings', { ok: true, t: 'Booking #' + id + ' cancelled. Seats released.' });
+  };
+  const addTrip = d => {
+    const dep = new Date(d.dep), arr = new Date(d.arr);
+    if (arr <= dep) return go('admin', { ok: false, t: 'Arrival time must be after departure time' });
+    const id = Math.max(0, ...trips.map(x => x.id)) + 1;
+    setTrips([...trips, { id, type: d.type, op: d.op.trim(), src: d.src.trim(), dst: d.dst.trim(), dep, arr, price: +d.price, seats: +d.seats, avail: +d.seats }]);
+    go('admin', { ok: true, t: 'Trip added' });
+  };
+  const delTrip = id => {
+    if (bookings.some(b => b.tripId === id)) return go('admin', { ok: false, t: 'Operation not allowed: this trip has bookings' });
+    setTrips(trips.filter(t => t.id !== id));
+    go('admin', { ok: true, t: 'Trip deleted' });
+  };
+
+  return html`<${Fragment}>
+    <${Nav} me=${me} go=${go} logout=${() => { setMe(null); go('search'); }} />
+    ${view === 'search' && html`<${Hero} count=${trips.length} />`}
+    <main className=${view === 'search' ? 'up' : ''}>
+      ${msg && html`<p className=${'msg ' + (msg.ok ? 'ok' : 'err')}>${msg.t}</p>`}
+      ${view === 'search' && html`<${SearchView} q=${q} setQ=${setQ} trips=${trips} me=${me} book=${book} />`}
+      ${view === 'login' && html`<${AuthForm} title="Welcome back" button="Login" onSubmit=${login} note="Demo admin: admin@travel.com / Admin@123"
+          fields=${[{ name: 'email', type: 'email', placeholder: 'Email' }, { name: 'password', type: 'password', placeholder: 'Password' }]} />`}
+      ${view === 'register' && html`<${AuthForm} title="Create your account" button="Register" onSubmit=${register}
+          fields=${[{ name: 'name', placeholder: 'Full name' }, { name: 'email', type: 'email', placeholder: 'Email' }, { name: 'password', type: 'password', minLength: 8, placeholder: 'Password (min 8 characters)' }]} />`}
+      ${view === 'bookings' && me && html`<${BookingsView} me=${me} bookings=${bookings} trips=${trips} cancel=${cancel} />`}
+      ${view === 'admin' && me && me.role === 'ADMIN' && html`<${AdminView} tab=${tab} setTab=${setTab} users=${users} trips=${trips} bookings=${bookings} addTrip=${addTrip} delTrip=${delTrip} />`}
+    </main>
+    <footer>
+      <div className="stack"><span>React</span><span>Java</span><span>Spring Boot</span><span>MySQL</span><span>JWT</span></div>
+      Demo with sample data held in your browser. The full project uses a React frontend with a Spring Boot REST API and MySQL.
+    </footer>
+  <//>`;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(html`<${App} />`);
+</script>
+</body>
+</html>
